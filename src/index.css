@@ -1,4 +1,111 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --background-light: #ffffff; 
+  --foreground-light: #09090b; 
+  --background-dark: #09090b; 
+  --foreground-dark: #ffffff; 
+  --accent-color: #000000; 
+}
+
+body {
+  background-color: var(--background-light);
+  color: var(--foreground-light);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Dark mode */
+.dark {
+  --background-light: #0f172a; /* slate-900 */
+  --foreground-light: #f8fafc; /* slate-50 */
+  --background-dark: #f8fafc; /* slate-50 */
+  --foreground-dark: #0f172a; /* slate-900 */
+}
+
+.dark body {
+  background-color: var(--background-light);
+  color: var(--foreground-light);
+}
+
+/* Animated aura background */
+.aura-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -2;
+  overflow: hidden;
+}
+
+.aura-light, .aura-dark {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.15;
+  animation: float 8s ease-in-out infinite;
+}
+
+.aura-light {
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, rgba(59, 130, 246, 0) 70%);
+  width: 400px;
+  height: 400px;
+}
+
+.aura-dark {
+  background: radial-gradient(circle, rgba(147, 51, 234, 0.3) 0%, rgba(147, 51, 234, 0) 70%);
+  width: 500px;
+  height: 500px;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 30px) scale(0.9);
+  }
+}
+
+.dark .aura-light {
+  display: none;
+}
+
+.dark .aura-dark {
+  display: block;
+}
+
+.light .aura-light {
+  display: block;
+}
+
+.light .aura-dark {
+  display: none;
+}
+
+/* Glassmorphism Utility */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.dark .glass {
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(15, 23, 42, 0.3);
+}
 
 /* Custom Scrollbar Styles */
 .custom-scrollbar::-webkit-scrollbar {
@@ -20,4 +127,32 @@
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: #94a3b8; /* slate-400 */
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #64748b; /* slate-500 */
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #94a3b8; /* slate-400 */
+}
+
+/* Motion variants for page transitions */
+.page-enter {
+  opacity: 0;
+  scale: 0.98;
+}
+.page-enter-active {
+  opacity: 1;
+  scale: 1;
+  transition: opacity 300ms, scale 300ms;
+}
+.page-exit {
+  opacity: 1;
+  scale: 1;
+}
+.page-exit-active {
+  opacity: 0;
+  scale: 1.02;
+  transition: opacity 300ms, scale 300ms;
 }
