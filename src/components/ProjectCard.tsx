@@ -54,8 +54,8 @@ export function ProjectCard({
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2, duration: 0.5 }}
         >
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-6">{project.title}</h2>
-          <div className="flex flex-wrap gap-12 md:gap-16">
+          <h2 className="text-xl md:text-3xl font-bold tracking-tight mb-4 md:mb-6">{project.title}</h2>
+          <div className="flex flex-wrap gap-8 md:gap-16">
             <div>
               <p className="text-[10px] text-zinc-500 font-extrabold uppercase tracking-widest mb-1.5">Project Timeline</p>
               <p className="text-base font-semibold text-zinc-900">{project.timeline}</p>

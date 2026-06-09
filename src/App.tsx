@@ -39,14 +39,14 @@ function Layout() {
       <ScrollToTop />
 
       {/* ── Page Content ── */}
-      <div className="w-full px-6 md:px-12 lg:px-20 py-10 flex flex-col items-center">
+      <div className="w-full px-4 sm:px-6 md:px-12 lg:px-20 py-6 md:py-10 flex flex-col items-center">
         {/* Page title */}
-        <motion.div 
+        <motion.div
           key={pageTitle}
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
-          className="w-full max-w-6xl mb-10"
+          className="w-full max-w-6xl mb-6 md:mb-10"
         >
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{pageTitle}</h1>
         </motion.div>

@@ -51,6 +51,24 @@ const vibeSites = [
     url: 'https://caseactive-sandbox.vercel.app/',
     image: '/vibe/caseactive.png',
   },
+  {
+    id: 9,
+    name: 'Edge Surgical',
+    url: 'https://edgesurgical.vercel.app/',
+    image: '/vibe/Edge.png',
+  },
+  {
+    id: 10,
+    name: 'Figma Token Sandbox',
+    url: 'https://figma-token-sandbox.vercel.app/',
+    image: '/vibe/Figma-token.png',
+  },
+  {
+    id: 11,
+    name: 'FacilityFlow',
+    url: 'https://facilityflow.dk/',
+    image: '/vibe/facilityscreen.png',
+  },
 ];
 
 export function VibeCodePage() {
