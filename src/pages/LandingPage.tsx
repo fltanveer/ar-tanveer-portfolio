@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
 import { ProjectCard } from '../components/ProjectCard';
 import { landingPagesData } from '../data/projects';
 
@@ -31,34 +32,48 @@ export function LandingPage() {
   const shareUrl = `${window.location.origin}${window.location.pathname.replace(/\/$/, '')}#/landing/${toSlug(active.title)}`;
 
   return (
-    <div className="w-full max-w-6xl flex flex-col gap-0">
-      {/* Tabs */}
-      <div className="w-full mb-12 overflow-x-auto custom-scrollbar pb-4">
-        <div className="flex items-center gap-3 w-max">
-          {landingPagesData.map(page => (
-            <button
-              key={page.id}
-              onClick={() => handleTabClick(page)}
-              className={`px-6 py-3 rounded-full font-medium text-sm whitespace-nowrap transition-all duration-300 ${
-                active.id === page.id
-                  ? 'bg-black text-white shadow-md'
-                  : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-300 hover:text-black hover:bg-gray-50'
-              }`}
-            >
-              {page.title}
-            </button>
-          ))}
-        </div>
+    <div className="w-full max-w-6xl flex flex-col md:flex-row gap-6 items-start">
+      {/* Vertical floating tab list */}
+      <div className="w-full md:w-52 shrink-0 md:sticky md:top-24 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-visible pb-2 md:pb-0 custom-scrollbar">
+        {landingPagesData.map(page => (
+          <motion.button
+            key={page.id}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => handleTabClick(page)}
+            className={`relative flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap md:whitespace-normal md:text-left w-max md:w-full transition-all duration-200 shrink-0 ${
+              active.id === page.id
+                ? 'bg-zinc-900 text-white shadow-md'
+                : 'bg-white text-zinc-500 border border-zinc-200 hover:border-zinc-300 hover:text-zinc-900 hover:bg-zinc-50'
+            }`}
+          >
+            {active.id === page.id && (
+              <motion.span
+                layoutId="active-indicator"
+                className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-white rounded-full opacity-40 hidden md:block"
+              />
+            )}
+            {page.title}
+          </motion.button>
+        ))}
       </div>
 
       {/* Active project */}
-      <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
-        <ProjectCard
-          key={active.id}
-          project={active}
-          shareUrl={shareUrl}
-          isLandingStyle
-        />
+      <div className="flex-1 min-w-0">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={active.id}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.25 }}
+          >
+            <ProjectCard
+              project={active}
+              shareUrl={shareUrl}
+              isLandingStyle
+            />
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );

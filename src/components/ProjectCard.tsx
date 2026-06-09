@@ -42,7 +42,7 @@ export function ProjectCard({
       viewport={{ once: true, margin: '-10% 0px' }}
       transition={{ duration: 0.6, ease: [0.215, 0.61, 0.355, 1] }}
       whileHover={{ y: -4, shadow: '0 20px 40px rgba(0,0,0,0.1)' }}
-      className={`bg-white rounded-[1.5rem] border p-6 md:p-8 lg:p-10 transition-all duration-500 ${
+      className={`bg-white rounded-[1.5rem] border p-4 md:p-8 lg:p-10 transition-all duration-500 ${
         highlighted
           ? 'border-zinc-900 shadow-[0_0_0_2px_rgba(24,24,27,1),0_10px_40px_rgba(0,0,0,0.08)] -translate-y-1 group'
           : 'border-zinc-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_10px_40px_rgba(0,0,0,0.06)] hover:border-zinc-300 hover:-translate-y-1 group'

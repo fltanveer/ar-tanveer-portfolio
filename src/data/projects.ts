@@ -155,6 +155,11 @@ export const landingPagesData = [
     category: "SaaS / Landing", figmaLink: "https://www.figma.com/design/W2rsVN4BgxMgtimRKQTbNg/Design-Demo-Files?node-id=82-20027&t=92Su7LDNN0qikFsP-1", images: ["/Revexialanding.webp"],
     context: "Revexia's landing page was crafted to capture the essence of the brand — a bold, high-converting entry point into the platform's ecosystem.\n\nThe design prioritizes immediate clarity and visual impact, using strong typographic hierarchy and purposeful motion to communicate the platform's power without overwhelming visitors.\n\nEvery section was engineered to guide users through the product story — from the problem statement to the solution reveal — culminating in a compelling call-to-action that drives sign-ups and demo requests."
   },
+  {
+    id: 112, title: "Everything4Logistics", timeline: "3 Weeks", designSystem: "Custom UI",
+    category: "Logistics / B2B", figmaLink: "https://www.figma.com/design/W2rsVN4BgxMgtimRKQTbNg/Design-Demo-Files?node-id=82-20027&t=92Su7LDNN0qikFsP-1", images: ["/vibe/Everything4logistics.webp"],
+    context: "Everything4Logistics is a B2B logistics platform landing page designed to serve freight operators, supply chain managers, and logistics service providers.\n\nThe design communicates reliability and scale through a structured, data-forward layout — converting complex service offerings into a clear, digestible narrative that drives enquiries and partnership conversations."
+  },
 ];
 
 export const dashboardsData = [

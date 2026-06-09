@@ -9,7 +9,7 @@ const toSlug = (title: string) =>
 export function DashboardsPage() {
   const { slug } = useParams<{ slug?: string }>();
   return (
-    <div className="w-full max-w-6xl flex flex-col gap-16">
+    <div className="w-full max-w-6xl flex flex-col gap-8 md:gap-16">
       {dashboardsData.map(project => {
         const projectSlug = toSlug(project.title);
         const shareUrl = `${window.location.origin}${window.location.pathname.replace(/\/$/, '')}#/dashboards/${projectSlug}`;
