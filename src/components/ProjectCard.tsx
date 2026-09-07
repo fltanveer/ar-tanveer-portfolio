@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Figma, Lightbulb } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import { CopyLinkButton } from './CopyLinkButton';
+import { Reveal } from './Reveal';
 import { Project } from '../data/projects';
 
 export function ProjectCard({
@@ -10,172 +11,244 @@ export function ProjectCard({
   highlighted = false,
   isLandingStyle = false,
   isVerticalScroll = false,
-  key,
 }: {
   project: Project;
   shareUrl: string;
   highlighted?: boolean;
   isLandingStyle?: boolean;
   isVerticalScroll?: boolean;
-  key?: React.Key;
 }) {
-  const [currentImgIndex, setCurrentImgIndex] = useState(0);
-  const [openContext, setOpenContext] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
+  const [index, setIndex] = useState(0);
+  const [contextOpen, setContextOpen] = useState(false);
+  const cardRef = useRef<HTMLElement>(null);
+  const contextBtnRef = useRef<HTMLButtonElement>(null);
 
+  const total = project.images.length;
+
+  // A different project in the same slot must not inherit the previous index —
+  // otherwise the Landing nav can land on an image that doesn't exist.
   useEffect(() => {
-    if (highlighted && cardRef.current) {
-      setTimeout(() => {
-        cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 150);
-    }
+    setIndex(0);
+  }, [project.id]);
+
+  const next = useCallback(() => setIndex((i) => (i + 1) % total), [total]);
+  const prev = useCallback(() => setIndex((i) => (i - 1 + total) % total), [total]);
+
+  // Deep-linked card scrolls itself into view. window.scrollTo rather than
+  // scrollIntoView, which hijacks the outer frame inside embedded previews.
+  useEffect(() => {
+    if (!highlighted || !cardRef.current) return;
+    const id = window.setTimeout(() => {
+      const el = cardRef.current;
+      if (!el) return;
+      window.scrollTo({
+        top: el.getBoundingClientRect().top + window.scrollY - 72,
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? 'auto'
+          : 'smooth',
+      });
+    }, 150);
+    return () => window.clearTimeout(id);
   }, [highlighted]);
 
-  const handleNext = () => setCurrentImgIndex(i => (i + 1) % project.images.length);
-  const handlePrev = () => setCurrentImgIndex(i => (i - 1 + project.images.length) % project.images.length);
+  // Escape closes the context panel and returns focus to its trigger.
+  useEffect(() => {
+    if (!contextOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setContextOpen(false);
+        contextBtnRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [contextOpen]);
+
+  const onCarouselKey = (e: React.KeyboardEvent) => {
+    if (total < 2) return;
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      next();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      prev();
+    }
+  };
+
+  const control =
+    'press flex size-9 items-center justify-center rounded-full border border-line bg-page/70 text-ink backdrop-blur-md transition-colors duration-200 hover:bg-page';
 
   return (
-    <motion.div
-      ref={cardRef}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-10% 0px' }}
-      transition={{ duration: 0.6, ease: [0.215, 0.61, 0.355, 1] }}
-      whileHover={{ y: -4, shadow: '0 20px 40px rgba(0,0,0,0.1)' }}
-      className={`bg-white rounded-[1.5rem] border p-4 md:p-8 lg:p-10 transition-all duration-500 ${
-        highlighted
-          ? 'border-zinc-900 shadow-[0_0_0_2px_rgba(24,24,27,1),0_10px_40px_rgba(0,0,0,0.08)] -translate-y-1 group'
-          : 'border-zinc-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_10px_40px_rgba(0,0,0,0.06)] hover:border-zinc-300 hover:-translate-y-1 group'
-      }`}
-    >
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-6">
-        <motion.div
-          initial={{ opacity: 0, x: -10 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
+    <Reveal>
+      <article
+        ref={cardRef}
+        className={`overflow-hidden rounded-[18px] bg-surface transition-shadow duration-300 ${
+          isLandingStyle ? 'p-3 md:p-4' : 'p-6 md:p-8'
+        } ${highlighted ? 'ring-1 ring-link' : ''}`}
+      >
+        {/* ── Spec row ──────────────────────────────────────────────────── */}
+        <header
+          className={`mb-6 flex flex-col gap-5 md:flex-row md:items-end md:justify-between ${
+            isLandingStyle ? 'px-3 pt-2 md:px-4' : ''
+          }`}
         >
-          <h2 className="text-xl md:text-3xl font-bold tracking-tight mb-4 md:mb-6">{project.title}</h2>
-          <div className="flex flex-wrap gap-8 md:gap-16">
-            <div>
-              <p className="text-[10px] text-zinc-500 font-extrabold uppercase tracking-widest mb-1.5">Project Timeline</p>
-              <p className="text-base font-semibold text-zinc-900">{project.timeline}</p>
-            </div>
-            <div>
-              <p className="text-[10px] text-zinc-500 font-extrabold uppercase tracking-widest mb-1.5">Design System</p>
-              <p className="text-base font-semibold text-zinc-900">{project.designSystem}</p>
-            </div>
+          <div className="min-w-0">
+            <h2 className="t-heading text-[22px] text-ink md:text-[28px]">{project.title}</h2>
+            <dl className="mt-3 flex flex-wrap gap-x-8 gap-y-2">
+              {[
+                ['Timeline', project.timeline],
+                ['Design system', project.designSystem],
+                ['Category', project.category],
+              ].map(([k, v]) => (
+                <div key={k} className="flex items-baseline gap-2">
+                  <dt className="t-label text-xs text-ink-soft">{k}</dt>
+                  <dd className="t-body text-[13px] text-ink-soft">{v}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
-        </motion.div>
-        <div className="flex items-center gap-3 flex-wrap">
-          <CopyLinkButton url={shareUrl} />
-          {project.figmaLink && (
-            <motion.a
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              href={project.figmaLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-900 text-white hover:bg-zinc-800 border border-transparent transition-all font-medium text-sm shadow-md"
-            >
-              <Figma className="w-4 h-4" />
-              View in Figma
-            </motion.a>
-          )}
-        </div>
-      </div>
 
-      {isVerticalScroll ? (
-        <div className="flex flex-col gap-6">
-          {project.images.map((img, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, scale: 0.98 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ delay: idx * 0.1, duration: 0.5 }}
-              className="w-full bg-zinc-100 rounded-[1.5rem] overflow-hidden border border-zinc-200/80 shadow-sm"
-            >
-              <img
-                src={img}
-                alt={`${project.title} detail ${idx + 1}`}
-                className="w-full h-auto object-contain"
-                referrerPolicy="no-referrer"
-              />
-            </motion.div>
-          ))}
-        </div>
-      ) : (
-        <div className={`relative w-full bg-zinc-100 rounded-[1.5rem] overflow-hidden group/image border border-zinc-200/80 shadow-inner ${isLandingStyle ? '' : 'aspect-[16/10]'}`}>
-          <AnimatePresence mode="wait">
-            <motion.img
-              key={currentImgIndex}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              src={project.images[currentImgIndex]}
-              alt={`${project.title} preview ${currentImgIndex + 1}`}
-              className={`w-full transition-opacity duration-500 ${isLandingStyle ? 'h-auto object-contain' : 'h-full object-cover'}`}
-              referrerPolicy="no-referrer"
-            />
-          </AnimatePresence>
-
-          {project.images.length > 1 && (
-            <>
-              <motion.button 
-                whileHover={{ scale: 1.1, backgroundColor: '#fff' }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handlePrev} 
-                className="absolute left-6 top-1/2 -translate-y-1/2 p-2 shadow-sm flex items-center justify-center z-10" 
-                style={{borderRadius:'20px', background:'#ffffffc4', border:'1px solid #fff'}} 
-                aria-label="Previous image"
+          <div className="flex shrink-0 flex-wrap items-center gap-2">
+            <CopyLinkButton url={shareUrl} />
+            {project.figmaLink && (
+              <a
+                href={project.figmaLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="press inline-flex items-center rounded-[980px] bg-raised px-4 py-2 text-[13px] text-ink transition-colors duration-200 hover:bg-overlay"
               >
-                <ChevronLeft className="w-8 h-8 md:w-10 md:h-10 text-black" strokeWidth={2.5} />
-              </motion.button>
-              <motion.button 
-                whileHover={{ scale: 1.1, backgroundColor: '#fff' }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleNext} 
-                className="absolute right-6 top-1/2 -translate-y-1/2 p-2 shadow-sm flex items-center justify-center z-10" 
-                style={{borderRadius:'20px', background:'#ffffffc4', border:'1px solid #fff'}} 
-                aria-label="Next image"
-              >
-                <ChevronRight className="w-8 h-8 md:w-10 md:h-10 text-black" strokeWidth={2.5} />
-              </motion.button>
-            </>
-          )}
+                View in Figma
+              </a>
+            )}
+          </div>
+        </header>
 
-          <AnimatePresence>
-            {openContext && (
-              <>
-                <motion.div 
+        {/* ── Captures ──────────────────────────────────────────────────── */}
+        {isVerticalScroll ? (
+          <div className="flex flex-col gap-4">
+            {project.images.map((img, i) => (
+              <figure
+                key={img}
+                className="capture-frame overflow-hidden rounded-[12px] bg-page"
+              >
+                <img
+                  src={img}
+                  alt={`${project.title}, screen ${i + 1} of ${total}`}
+                  loading="lazy"
+                  className="capture h-auto w-full object-contain"
+                  referrerPolicy="no-referrer"
+                />
+              </figure>
+            ))}
+          </div>
+        ) : (
+          <div
+            className="capture-frame relative overflow-hidden rounded-[12px] bg-page"
+            // No tabIndex here: it would add a tab stop with no visible affordance.
+            // The prev/next buttons are the affordance, and keydown still catches
+            // arrow presses bubbling up from them.
+            onKeyDown={onCarouselKey}
+            role={total > 1 ? 'group' : undefined}
+            aria-roledescription={total > 1 ? 'carousel' : undefined}
+            aria-label={total > 1 ? `${project.title} screens` : undefined}
+          >
+            {/* object-contain, never cover: these captures are the work itself,
+                and cropping them is editing someone's composition. */}
+            <div className="flex items-center justify-center">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.img
+                  key={index}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="fixed inset-0 z-40 bg-black/5 backdrop-blur-[2px]" 
-                  onClick={() => setOpenContext(false)} 
+                  transition={{ duration: 0.24, ease: [0.28, 0.11, 0.32, 1] }}
+                  src={project.images[index]}
+                  alt={`${project.title}, screen ${index + 1} of ${total}`}
+                  loading="lazy"
+                  // Landing pages are full-page designs — cap them and you show a
+                  // letterboxed sliver of the actual work.
+                  className={`capture h-auto w-full object-contain ${
+                    isLandingStyle ? '' : 'max-h-[86vh]'
+                  }`}
+                  referrerPolicy="no-referrer"
                 />
-                <motion.div 
-                  initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                  className="absolute bottom-[4.5rem] right-4 md:bottom-[5rem] md:right-6 w-[85%] sm:w-[50%] md:w-[45%] lg:w-[35%] max-h-[80%] bg-zinc-900/95 backdrop-blur-xl rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.3)] z-50 p-6 md:p-8 pr-4 md:pr-6 overflow-y-auto custom-scrollbar border border-zinc-700 text-zinc-50"
+              </AnimatePresence>
+            </div>
+
+            {total > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={prev}
+                  aria-label="Previous screen"
+                  className={`${control} absolute left-3 top-1/2 -translate-y-1/2`}
                 >
-                  <h3 className="text-lg font-bold mb-3 flex items-center gap-2 pr-4"><Lightbulb className="w-5 h-5 text-yellow-400" />About this Project</h3>
-                  <div className="text-zinc-300 text-sm leading-relaxed whitespace-pre-wrap">{project.context}</div>
-                </motion.div>
+                  <ChevronLeft className="size-[18px]" />
+                </button>
+                <button
+                  type="button"
+                  onClick={next}
+                  aria-label="Next screen"
+                  className={`${control} absolute right-3 top-1/2 -translate-y-1/2`}
+                >
+                  <ChevronRight className="size-[18px]" />
+                </button>
+                <p
+                  className="t-label absolute left-3 top-3 rounded-full bg-page/70 px-2.5 py-1 text-[11px] text-ink backdrop-blur-md"
+                  aria-live="polite"
+                >
+                  {index + 1} of {total}
+                </p>
               </>
             )}
-          </AnimatePresence>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setOpenContext(prev => !prev)}
-            className="absolute bottom-4 right-4 md:bottom-6 md:right-6 bg-zinc-900 hover:bg-zinc-800 text-zinc-50 px-5 py-2.5 rounded-xl font-medium text-sm flex items-center gap-2 shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all z-50 border border-zinc-800 hover:scale-105"
-          >
-            <Lightbulb className="w-4 h-4" />Project Context
-          </motion.button>
-        </div>
-      )}
-    </motion.div>
+
+            <AnimatePresence>
+              {contextOpen && (
+                <motion.div
+                  // Materialize: blur and scale together, so it reads as a surface
+                  // arriving rather than an image fading in.
+                  initial={{ opacity: 0, transform: 'scale(0.97)' }}
+                  animate={{ opacity: 1, transform: 'scale(1)' }}
+                  exit={{ opacity: 0, transform: 'scale(0.97)' }}
+                  transition={{ type: 'spring', bounce: 0, duration: 0.35 }}
+                  style={{ transformOrigin: 'bottom right' }}
+                  role="dialog"
+                  aria-label={`About ${project.title}`}
+                  className="material-panel custom-scrollbar absolute bottom-16 right-3 z-20 max-h-[78%] w-[min(30rem,calc(100%-1.5rem))] overflow-y-auto rounded-[18px] border border-line p-6"
+                >
+                  <div className="mb-3 flex items-start justify-between gap-4">
+                    <h3 className="t-label text-xs text-ink-soft">About this project</h3>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setContextOpen(false);
+                        contextBtnRef.current?.focus();
+                      }}
+                      aria-label="Close"
+                      className="press -mr-1 -mt-1 rounded-full p-1 text-ink-soft transition-colors duration-200 hover:text-ink"
+                    >
+                      <X className="size-4" />
+                    </button>
+                  </div>
+                  <div className="t-body whitespace-pre-wrap text-[14px] text-ink-soft">
+                    {project.context}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <button
+              ref={contextBtnRef}
+              type="button"
+              onClick={() => setContextOpen((o) => !o)}
+              aria-expanded={contextOpen}
+              className="press absolute bottom-3 right-3 z-20 rounded-[980px] bg-page/70 px-4 py-2 text-[13px] text-ink backdrop-blur-md transition-colors duration-200 hover:bg-page"
+            >
+              Project context
+            </button>
+          </div>
+        )}
+      </article>
+    </Reveal>
   );
 }

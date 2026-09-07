@@ -17,7 +17,7 @@ export const projectsData = [
     category: "SaaS",
     figmaLink: "https://www.figma.com/design/b84FCZ0uBhk3BoyD8XxEUY/Revexia?node-id=0-1&t=bMJKzmEbeS0aYqao-1",
     images: ["/revexia1.webp", "/revexia2.webp", "/revexia3.webp", "/revexia4.webp"],
-    context: "Revexia is a next-generation SaaS platform engineered to revolutionize how modern businesses manage, monitor, and scale their digital operations.\n\nThe primary challenge was designing a system capable of surfacing critical insights from massive data streams without overwhelming users. We crafted a bespoke UI system built around clarity and speed — every component was purpose-built to reduce decision fatigue and accelerate action.\n\nAcross 5 months, we shaped Revexia into a platform that feels both powerful and instinctive — from its intelligent dashboard to its deep customization layers — positioning it as a tool that grows smarter with every team that uses it."
+    context: "Revexia is a next-generation SaaS platform engineered to revolutionize how modern businesses manage, monitor, and scale their digital operations.\n\nThe primary challenge was designing a system capable of surfacing critical insights from massive data streams without overwhelming users. We crafted a bespoke UI system built around clarity and speed. Every component was purpose-built to reduce decision fatigue and accelerate action.\n\nAcross 5 months, we shaped Revexia into a platform that feels both powerful and instinctive, from its intelligent dashboard to its deep customization layers, positioning it as a tool that grows smarter with every team that uses it."
   },
   {
     id: 2,
@@ -27,7 +27,7 @@ export const projectsData = [
     category: "SaaS / Productivity",
     figmaLink: "https://www.figma.com/design/ldwZE4FOlFGQ0fHpgpVoYE/Flowcite?node-id=0-1&t=mULJgITe43DVxDxe-1",
     images: ["/Flowcite-1.webp", "/Flowcite-2.webp", "/Flowcite-3.webp", "/Flowcite-4.webp"],
-    context: "Flowcite is a cutting-edge SaaS productivity platform designed to streamline research workflows, citation management, and collaborative content creation for academic and professional teams.\n\nThe core challenge was synthesizing complex research pipelines into a clean, intuitive interface that doesn't overwhelm users with information. We built a fully custom design system to handle rich document previews, smart citation tagging, and real-time collaborative editing seamlessly.\n\nOver 5 months, the focus was on crafting a fast, distraction-free writing environment that intelligently connects sources, automates citation formatting, and keeps research organized — transforming how teams move from discovery to publication."
+    context: "Flowcite is a cutting-edge SaaS productivity platform designed to streamline research workflows, citation management, and collaborative content creation for academic and professional teams.\n\nThe core challenge was synthesizing complex research pipelines into a clean, intuitive interface that doesn't overwhelm users with information. We built a fully custom design system to handle rich document previews, smart citation tagging, and real-time collaborative editing seamlessly.\n\nOver 5 months, the focus was on crafting a fast, distraction-free writing environment that intelligently connects sources, automates citation formatting, and keeps research organized, transforming how teams move from discovery to publication."
   },
   {
     id: 3,
@@ -37,7 +37,7 @@ export const projectsData = [
     category: "SaaS",
     figmaLink: "https://www.figma.com/design/qaj06cNC6Kgo3QgJ5ygKyH/Dome-Prototype?node-id=0-1&t=RB5hqIFm8sVqiHtr-1",
     images: ["/Dome1.webp", "/Dome2.webp", "/Dome3.webp"],
-    context: "DOME is a powerful SaaS platform built to centralize and simplify enterprise-level operations management under one unified interface.\n\nThe design challenge was creating a system that could handle an enormous complexity of data and workflows while remaining approachable for teams of all technical levels. We developed a fully custom UI with a strong emphasis on spatial hierarchy and contextual navigation, ensuring users always know where they are and what actions are available.\n\nOver 6 months, we focused on building scalable design patterns that could grow with the platform — from onboarding flows to advanced analytics dashboards — delivering a cohesive and premium experience across every touchpoint."
+    context: "DOME is a powerful SaaS platform built to centralize and simplify enterprise-level operations management under one unified interface.\n\nThe design challenge was creating a system that could handle an enormous complexity of data and workflows while remaining approachable for teams of all technical levels. We developed a fully custom UI with a strong emphasis on spatial hierarchy and contextual navigation, ensuring users always know where they are and what actions are available.\n\nOver 6 months, we focused on building scalable design patterns that could grow with the platform, from onboarding flows to advanced analytics dashboards, delivering a cohesive and premium experience across every touchpoint."
   },
 ];
 
@@ -100,7 +100,7 @@ export const appDesignData = [
     category: "EdTech",
     figmaLink: "https://www.figma.com/design/W2rsVN4BgxMgtimRKQTbNg/Design-Demo-Files?node-id=18-12438&t=92Su7LDNN0qikFsP-1",
     images: ["/Studylity1.webp", "/Studylity2.webp", "/Studylity3.webp"],
-    context: "StudyLity is a modern EdTech application designed to help students manage their study schedules, track progress, and stay motivated throughout their academic journey.\n\nThe design focuses on reducing overwhelm by breaking study goals into digestible, gamified tasks. Clear visual progress indicators and a clean, distraction-free interface keep students engaged without adding cognitive load.\n\nOver 3 months, we crafted an experience that balances structure with flexibility — giving students the tools they need to study smarter, not harder."
+    context: "StudyLity is a modern EdTech application designed to help students manage their study schedules, track progress, and stay motivated throughout their academic journey.\n\nThe design focuses on reducing overwhelm by breaking study goals into digestible, gamified tasks. Clear visual progress indicators and a clean, distraction-free interface keep students engaged without adding cognitive load.\n\nOver 3 months, we crafted an experience that balances structure with flexibility, giving students the tools they need to study smarter, not harder."
   },
 ];
 
@@ -113,12 +113,12 @@ export const landingPagesData = [
   {
     id: 102, title: "Budget Now", timeline: "3 Weeks", designSystem: "Custom UI",
     category: "FinTech", figmaLink: "https://www.figma.com/design/W2rsVN4BgxMgtimRKQTbNg/Design-Demo-Files?node-id=82-20027&t=92Su7LDNN0qikFsP-1", images: ["/BudgetNow.webp"],
-    context: "Budget Now is a clean and modern personal finance landing page built to help users take control of their money with intuitive budgeting tools.\n\nThe design focuses on clarity and trust — essential factors for a financial product. The layout guides users through key features with a logical flow, ending with a strong call-to-action."
+    context: "Budget Now is a clean and modern personal finance landing page built to help users take control of their money with intuitive budgeting tools.\n\nThe design focuses on clarity and trust. These are essential factors for a financial product. The layout guides users through key features with a logical flow, ending with a strong call-to-action."
   },
   {
     id: 103, title: "Jeff Sutherland", timeline: "2 Weeks", designSystem: "Custom UI",
     category: "Personal Brand", figmaLink: "https://www.figma.com/design/W2rsVN4BgxMgtimRKQTbNg/Design-Demo-Files?node-id=82-20027&t=92Su7LDNN0qikFsP-1", images: ["/JeffLanding.webp", "/JeffSutherland.webp"],
-    context: "A personal branding landing page for Jeff Sutherland — a speaker, author, and the co-creator of Scrum.\n\nThis page was designed to convey authority and credibility at a glance. Clean typography and strong imagery communicate the subject's expertise, while a compelling hero section drives visitors toward booking and speaking inquiries."
+    context: "A personal branding landing page for Jeff Sutherland, a speaker, author, and the co-creator of Scrum.\n\nThis page was designed to convey authority and credibility at a glance. Clean typography and strong imagery communicate the subject's expertise, while a compelling hero section drives visitors toward booking and speaking inquiries."
   },
   {
     id: 104, title: "Kina Becha", timeline: "1 Month", designSystem: "Minimalist UI",
@@ -153,12 +153,12 @@ export const landingPagesData = [
   {
     id: 111, title: "Revexia", timeline: "3 Weeks", designSystem: "Custom UI",
     category: "SaaS / Landing", figmaLink: "https://www.figma.com/design/W2rsVN4BgxMgtimRKQTbNg/Design-Demo-Files?node-id=82-20027&t=92Su7LDNN0qikFsP-1", images: ["/Revexialanding.webp"],
-    context: "Revexia's landing page was crafted to capture the essence of the brand — a bold, high-converting entry point into the platform's ecosystem.\n\nThe design prioritizes immediate clarity and visual impact, using strong typographic hierarchy and purposeful motion to communicate the platform's power without overwhelming visitors.\n\nEvery section was engineered to guide users through the product story — from the problem statement to the solution reveal — culminating in a compelling call-to-action that drives sign-ups and demo requests."
+    context: "Revexia's landing page was crafted to capture the essence of the brand, a bold, high-converting entry point into the platform's ecosystem.\n\nThe design prioritizes immediate clarity and visual impact, using strong typographic hierarchy and purposeful motion to communicate the platform's power without overwhelming visitors.\n\nEvery section was engineered to guide users through the product story, from the problem statement to the solution reveal, culminating in a compelling call-to-action that drives sign-ups and demo requests."
   },
   {
     id: 112, title: "Everything4Logistics", timeline: "3 Weeks", designSystem: "Custom UI",
     category: "Logistics / B2B", figmaLink: "https://www.figma.com/design/W2rsVN4BgxMgtimRKQTbNg/Design-Demo-Files?node-id=82-20027&t=92Su7LDNN0qikFsP-1", images: ["/vibe/Everything4logistics.webp"],
-    context: "Everything4Logistics is a B2B logistics platform landing page designed to serve freight operators, supply chain managers, and logistics service providers.\n\nThe design communicates reliability and scale through a structured, data-forward layout — converting complex service offerings into a clear, digestible narrative that drives enquiries and partnership conversations."
+    context: "Everything4Logistics is a B2B logistics platform landing page designed to serve freight operators, supply chain managers, and logistics service providers.\n\nThe design communicates reliability and scale through a structured, data-forward layout, converting complex service offerings into a clear, digestible narrative that drives enquiries and partnership conversations."
   },
 ];
 
@@ -171,7 +171,7 @@ export const dashboardsData = [
     category: "Dashboard / SaaS",
     figmaLink: "",
     images: ["/dashboard1.webp", "/dashboard2.webp", "/dashboard3.webp"],
-    context: "Clarity OS is a centralized operational dashboard designed to surface actionable insights from complex organizational data.\n\nUnlike traditional dashboards that hide information behind layers of navigation, Clarity OS uses a vertically-scrolling layout to tell a continuous data story. This approach ensures that executive teams can see the full picture — from high-level KPIs down to granular operation metrics — in one fluid movement.\n\nThe UI system was built with a focus on high information density without visual noise, using a monochrome foundation with purposeful color accents to highlight anomalies and critical trends."
+    context: "Clarity OS is a centralized operational dashboard designed to surface actionable insights from complex organizational data.\n\nUnlike traditional dashboards that hide information behind layers of navigation, Clarity OS uses a vertically-scrolling layout to tell a continuous data story. This approach ensures that executive teams can see the full picture, from high-level KPIs down to granular operation metrics, in one fluid movement.\n\nThe UI system was built with a focus on high information density without visual noise, using a monochrome foundation with purposeful color accents to highlight anomalies and critical trends."
   },
 ];
 

@@ -1,213 +1,121 @@
-import React, { useState, useEffect } from 'react';
-import { HashRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { Layers, Smartphone, Monitor, Layout as LayoutIcon, Zap } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
-import { ScrollNav } from './components/ScrollNav';
+import React, { useEffect, useState } from 'react';
+import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { AnimatePresence, MotionConfig, motion } from 'motion/react';
+import { PageAura } from './components/PageAura';
+import { ProfileDrawer } from './components/ProfileDrawer';
 import { ScrollToTop } from './components/ScrollToTop';
-import { SaaSPage } from './pages/SaaSPage';
+import { SideRail } from './components/SideRail';
+import { sections, utilityNav } from './data/sections';
 import { AppDesignPage } from './pages/AppDesignPage';
-import { LandingPage } from './pages/LandingPage';
 import { DashboardsPage } from './pages/DashboardsPage';
+import { HandoffPage } from './pages/HandoffPage';
+import { HomePage } from './pages/HomePage';
+import { LandingPage } from './pages/LandingPage';
+import { SaaSPage } from './pages/SaaSPage';
 import { VibeCodePage } from './pages/VibeCodePage';
 
-// ─── Section background config ────────────────────────────────────────────────
-const sectionBg: Record<string, { gradient: string; iconColor: string; Icon: React.ComponentType<{ size?: number; strokeWidth?: number; color?: string }> }> = {
-  saas:       { gradient: 'rgba(191,219,254,0.55)', iconColor: '#93c5fd', Icon: Layers },
-  appdesign:  { gradient: 'rgba(221,214,254,0.55)', iconColor: '#c4b5fd', Icon: Smartphone },
-  dashboards: { gradient: 'rgba(167,243,208,0.55)', iconColor: '#6ee7b7', Icon: Monitor },
-  landing:    { gradient: 'rgba(253,230,138,0.50)', iconColor: '#fbbf24', Icon: LayoutIcon },
-  vibecode:   { gradient: 'rgba(165,243,252,0.55)', iconColor: '#22d3ee', Icon: Zap },
-};
-
-const iconPositions = [
-  { left: '7%',  top: 12,  size: 54, floatY: 10, floatDur: 4.2, rotateDeg: 8  },
-  { left: '26%', top: 68,  size: 32, floatY: 7,  floatDur: 5.6, rotateDeg: -6 },
-  { left: '50%', top: 6,   size: 50, floatY: 12, floatDur: 3.8, rotateDeg: 5  },
-  { left: '62%', top: 54,  size: 80, floatY: 8,  floatDur: 6.1, rotateDeg: -4 },
-  { left: '76%', top: 10,  size: 44, floatY: 10, floatDur: 4.7, rotateDeg: 7  },
-  { left: '91%', top: 34,  size: 30, floatY: 6,  floatDur: 5.2, rotateDeg: -9 },
-  { left: '38%', top: 108, size: 22, floatY: 8,  floatDur: 4.4, rotateDeg: 6  },
-];
-
-const bottomIconPositions = [
-  { left: '9%',  bottom: 14,  size: 48, floatY: 9,  floatDur: 4.5, rotateDeg: -7 },
-  { left: '28%', bottom: 60,  size: 30, floatY: 7,  floatDur: 5.8, rotateDeg: 6  },
-  { left: '51%', bottom: 8,   size: 46, floatY: 11, floatDur: 3.9, rotateDeg: -5 },
-  { left: '63%', bottom: 50,  size: 74, floatY: 8,  floatDur: 6.3, rotateDeg: 4  },
-  { left: '77%', bottom: 12,  size: 40, floatY: 10, floatDur: 4.8, rotateDeg: -8 },
-  { left: '90%', bottom: 36,  size: 28, floatY: 6,  floatDur: 5.4, rotateDeg: 9  },
-];
-
-// ─── Main Layout ──────────────────────────────────────────────────────────────
-function Layout() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [scrolled, setScrolled] = useState(false);
-
+/** Route changes start at the top; deep-linked cards scroll themselves after. */
+function ScrollReset() {
+  const { pathname } = useLocation();
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+    if (pathname.split('/').filter(Boolean).length > 1) return; // deep link owns the scroll
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [pathname]);
+  return null;
+}
 
-  const section = location.pathname.split('/')[1] || 'saas';
-  const bg = sectionBg[section] ?? sectionBg.saas;
+function Footer() {
+  return (
+    // Same padding rhythm as every section above it. The centred max-width
+    // wrapper this used to have pushed the footer out of line with the
+    // left-biased column the whole page is built on.
+    <footer className="border-t border-line px-5 py-10 sm:px-8 lg:px-16">
+      <p className="t-body text-xs text-ink-soft">
+        Designed and built by Md Ashrafur Rahman Tanveer in Dhaka, Bangladesh.
+      </p>
+      <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
+        <a
+          href="https://www.linkedin.com/in/artanveer/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex min-h-[24px] items-center text-xs text-link transition-opacity duration-200 hover:opacity-80"
+        >
+          LinkedIn
+        </a>
+      </div>
+    </footer>
+  );
+}
 
-  const pageTitle = section === 'saas' ? 'SaaS Projects' : section === 'landing' ? 'Landing Pages' : section === 'dashboards' ? 'Dashboards' : section === 'vibecode' ? 'Vibe Code' : 'App Design';
-
-  const navItems = [
-    { label: 'SaaS',          path: '/saas',       active: section === 'saas',       icon: <Layers    className="w-4 h-4" /> },
-    { label: 'App Design',    path: '/appdesign',  active: section === 'appdesign',  icon: <Smartphone className="w-4 h-4" /> },
-    { label: 'Dashboards',    path: '/dashboards', active: section === 'dashboards', icon: <Monitor  className="w-4 h-4" /> },
-    { label: 'Landing Pages', path: '/landing',    active: section === 'landing',    icon: <LayoutIcon className="w-4 h-4" /> },
-    { label: 'Vibe Code',     path: '/vibecode',   active: section === 'vibecode',   icon: <Zap        className="w-4 h-4" /> },
-  ];
+function Layout() {
+  const location = useLocation();
+  const [profileOpen, setProfileOpen] = useState(false);
+  const isHome = location.pathname === '/';
 
   return (
-    <div className="relative min-h-screen bg-white font-sans text-zinc-950 flex flex-col items-center selection:bg-zinc-900 selection:text-white">
+    <div className="min-h-dvh bg-page">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-surface focus:px-4 focus:py-2 focus:text-sm focus:text-ink"
+      >
+        Skip to content
+      </a>
 
-      {/* ── Bottom gradient mirror (scroll-triggered) ── */}
-      <AnimatePresence>
-        {scrolled && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.7, ease: 'easeInOut' }}
-            className="fixed bottom-0 left-0 right-0 pointer-events-none"
-            style={{ height: '450px', zIndex: 0 }}
-          >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={section + '-bottom'}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.6, ease: 'easeInOut' }}
-                className="absolute inset-0"
-                style={{ background: `linear-gradient(to top, ${bg.gradient}, transparent)` }}
-              >
-                {bottomIconPositions.map((pos, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, scale: 0.7 }}
-                    animate={{
-                      opacity: 1,
-                      scale: 1,
-                      y: [0, -pos.floatY, 0],
-                      rotate: [0, pos.rotateDeg, 0],
-                    }}
-                    exit={{ opacity: 0, scale: 0.7 }}
-                    transition={{
-                      opacity: { duration: 0.5, delay: i * 0.04 },
-                      scale:   { duration: 0.5, delay: i * 0.04 },
-                      y:       { duration: pos.floatDur, repeat: Infinity, ease: 'easeInOut', delay: i * 0.3 },
-                      rotate:  { duration: pos.floatDur * 1.3, repeat: Infinity, ease: 'easeInOut', delay: i * 0.2 },
-                    }}
-                    className="absolute"
-                    style={{ left: pos.left, bottom: pos.bottom }}
-                  >
-                    <bg.Icon size={pos.size} color={bg.iconColor} strokeWidth={1.2} />
-                  </motion.div>
-                ))}
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* ── Animated section background ── */}
-      <div className="absolute top-0 left-0 right-0 pointer-events-none overflow-hidden" style={{ height: '450px', zIndex: 0 }}>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={section}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.6, ease: 'easeInOut' }}
-            className="absolute inset-0"
-            style={{ background: `linear-gradient(to bottom, ${bg.gradient}, transparent)` }}
-          >
-            {iconPositions.map((pos, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0.7 }}
-                animate={{
-                  opacity: 1,
-                  scale: 1,
-                  y: [0, -pos.floatY, 0],
-                  rotate: [0, pos.rotateDeg, 0],
-                }}
-                exit={{ opacity: 0, scale: 0.7 }}
-                transition={{
-                  opacity: { duration: 0.5, delay: i * 0.04 },
-                  scale:   { duration: 0.5, delay: i * 0.04 },
-                  y:       { duration: pos.floatDur, repeat: Infinity, ease: 'easeInOut', delay: i * 0.3 },
-                  rotate:  { duration: pos.floatDur * 1.3, repeat: Infinity, ease: 'easeInOut', delay: i * 0.2 },
-                }}
-                className="absolute"
-                style={{ left: pos.left, top: pos.top }}
-              >
-                <bg.Icon size={pos.size} color={bg.iconColor} strokeWidth={1.2} />
-              </motion.div>
-            ))}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      {/* ── Top Navigation ── */}
-      <ScrollNav navItems={navItems} navigate={navigate} />
-
-      {/* ── Scroll To Top ── */}
+      <SideRail
+        items={sections}
+        utility={utilityNav}
+        onOpenProfile={() => setProfileOpen(true)}
+      />
+      <ProfileDrawer open={profileOpen} onClose={() => setProfileOpen(false)} />
       <ScrollToTop />
+      <ScrollReset />
 
-      {/* ── Page Content ── */}
-      <div className="relative w-full px-4 sm:px-6 md:px-12 lg:px-20 py-6 md:py-10 flex flex-col items-center" style={{ zIndex: 1 }}>
-        {/* Page title */}
-        <motion.div
-          key={pageTitle}
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-          className="w-full max-w-6xl mb-6 md:mb-10"
-        >
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{pageTitle}</h1>
-        </motion.div>
-
-        {/* Routes */}
-        <AnimatePresence mode="wait">
+      <div className="lg:pl-60">
+        {/* Home is excluded: its top-right already carries the portrait, and a
+            second focal point in the same corner would fight it. */}
+        <main id="main" className="relative isolate">
+          {!isHome && <PageAura />}
+          <AnimatePresence mode="wait">
           <motion.div
-            key={location.pathname.split('/')[1]}
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.02 }}
-            transition={{ duration: 0.4, ease: 'easeInOut' }}
-            className="w-full flex justify-center"
+            key={location.pathname.split('/')[1] || 'home'}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: 'linear' }}
           >
             <Routes location={location}>
-              <Route path="/"                element={<SaaSPage />} />
-              <Route path="/saas"            element={<SaaSPage />} />
-              <Route path="/saas/:slug"      element={<SaaSPage />} />
-              <Route path="/landing"         element={<LandingPage />} />
-              <Route path="/landing/:slug"   element={<LandingPage />} />
-              <Route path="/appdesign"       element={<AppDesignPage />} />
+              <Route path="/" element={<HomePage />} />
+              <Route path="/saas" element={<SaaSPage />} />
+              <Route path="/saas/:slug" element={<SaaSPage />} />
+              <Route path="/landing" element={<LandingPage />} />
+              <Route path="/landing/:slug" element={<LandingPage />} />
+              <Route path="/appdesign" element={<AppDesignPage />} />
               <Route path="/appdesign/:slug" element={<AppDesignPage />} />
-              <Route path="/dashboards"      element={<DashboardsPage />} />
+              <Route path="/dashboards" element={<DashboardsPage />} />
               <Route path="/dashboards/:slug" element={<DashboardsPage />} />
-              <Route path="/vibecode"        element={<VibeCodePage />} />
+              <Route path="/vibecode" element={<VibeCodePage />} />
+              <Route path="/handoff" element={<HandoffPage />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </motion.div>
         </AnimatePresence>
+        </main>
+        <Footer />
       </div>
     </div>
   );
 }
 
-// ─── Root ─────────────────────────────────────────────────────────────────────
 export default function App() {
   return (
-    <HashRouter>
-      <Layout />
-    </HashRouter>
+    // reducedMotion="user" makes every motion component below respect
+    // prefers-reduced-motion automatically — animating only opacity and colour,
+    // never transform. The global CSS override cannot reach these, because
+    // JS-driven animations don't read transition-duration.
+    <MotionConfig reducedMotion="user">
+      <HashRouter>
+        <Layout />
+      </HashRouter>
+    </MotionConfig>
   );
 }

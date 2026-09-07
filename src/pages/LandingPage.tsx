@@ -1,79 +1,75 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'motion/react';
+import React from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { AnimatePresence, motion } from 'motion/react';
+import { PageHeader } from '../components/PageHeader';
 import { ProjectCard } from '../components/ProjectCard';
 import { landingPagesData } from '../data/projects';
-
-const toSlug = (title: string) =>
-  title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+import { sections } from '../data/sections';
+import { shareUrlFor, toSlug } from '../lib/slug';
 
 export function LandingPage() {
   const { slug } = useParams<{ slug?: string }>();
-  const navigate = useNavigate();
+  const meta = sections.find((s) => s.section === 'landing');
+  const index = sections.findIndex((s) => s.section === 'landing') + 1;
 
-  const defaultProject = slug
-    ? landingPagesData.find(p => toSlug(p.title) === slug) ?? landingPagesData[0]
-    : landingPagesData[0];
-
-  const [active, setActive] = useState(defaultProject);
-
-  useEffect(() => {
-    if (slug) {
-      const found = landingPagesData.find(p => toSlug(p.title) === slug);
-      if (found) setActive(found);
-    }
-  }, [slug]);
-
-  const handleTabClick = (project: typeof landingPagesData[0]) => {
-    setActive(project);
-    navigate(`/landing/${toSlug(project.title)}`);
-  };
-
-  const shareUrl = `${window.location.origin}${window.location.pathname.replace(/\/$/, '')}#/landing/${toSlug(active.title)}`;
+  // Derived from the URL, not mirrored into state: the route is already the single
+  // source of truth, and duplicating it into useState is how the two drift apart.
+  const active =
+    (slug && landingPagesData.find((p) => toSlug(p.title) === slug)) || landingPagesData[0];
 
   return (
-    <div className="w-full max-w-6xl flex flex-col md:flex-row gap-6 items-start">
-      {/* Vertical floating tab list */}
-      <div className="w-full md:w-52 shrink-0 md:sticky md:top-24 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-visible pb-2 md:pb-0 custom-scrollbar">
-        {landingPagesData.map(page => (
-          <motion.button
-            key={page.id}
-            whileTap={{ scale: 0.97 }}
-            onClick={() => handleTabClick(page)}
-            className={`relative flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap md:whitespace-normal md:text-left w-max md:w-full transition-all duration-200 shrink-0 ${
-              active.id === page.id
-                ? 'bg-zinc-900 text-white shadow-md'
-                : 'bg-white text-zinc-500 border border-zinc-200 hover:border-zinc-300 hover:text-zinc-900 hover:bg-zinc-50'
-            }`}
-          >
-            {active.id === page.id && (
-              <motion.span
-                layoutId="active-indicator"
-                className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-white rounded-full opacity-40 hidden md:block"
-              />
-            )}
-            {page.title}
-          </motion.button>
-        ))}
-      </div>
+    <div className="px-5 py-14 sm:px-8 md:py-20 lg:px-16">
+      <PageHeader
+        index={index}
+        title={meta?.label ?? 'Landing Pages'}
+        blurb={meta?.blurb ?? ''}
+        count={landingPagesData.length}
+      />
 
-      {/* Active project */}
-      <div className="flex-1 min-w-0">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={active.id}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.25 }}
-          >
-            <ProjectCard
-              project={active}
-              shareUrl={shareUrl}
-              isLandingStyle
-            />
-          </motion.div>
-        </AnimatePresence>
+      <div className="flex flex-col items-start gap-6 lg:flex-row lg:gap-8">
+        {/* Navigation, not tabs: each entry changes the URL. Real links give
+            Cmd/middle-click and correct announcement, where a tablist with no
+            tabpanel or roving tabindex would be worse than no ARIA at all.
+            Sticky on lg+ — these captures run to ~9000px tall, so without it you'd
+            scroll a whole design just to reach the next project. */}
+        <nav
+          aria-label="Landing pages"
+          className="custom-scrollbar flex w-full shrink-0 flex-wrap gap-1 lg:sticky lg:top-20 lg:max-h-[calc(100dvh-6rem)] lg:w-52 lg:flex-col lg:flex-nowrap lg:self-start lg:overflow-y-auto"
+        >
+          {landingPagesData.map((page) => {
+            const selected = active.id === page.id;
+            return (
+              <Link
+                key={page.id}
+                to={`/landing/${toSlug(page.title)}`}
+                aria-current={selected ? 'page' : undefined}
+                className={`press shrink-0 whitespace-nowrap rounded-[980px] px-4 py-2 text-[14px] transition-colors duration-200 lg:w-full lg:whitespace-normal ${
+                  selected ? 'bg-raised text-ink' : 'text-ink-soft hover:bg-surface hover:text-ink'
+                }`}
+              >
+                {page.title}
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="min-w-0 flex-1">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={active.id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: 'linear' }}
+            >
+              <ProjectCard
+                project={active}
+                shareUrl={shareUrlFor('landing', active.title)}
+                isLandingStyle
+              />
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );

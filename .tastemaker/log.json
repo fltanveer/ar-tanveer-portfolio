@@ -1,0 +1,14 @@
+[
+  {
+    "date": "2026-09-06",
+    "page": "portfolio",
+    "macrostructure": "Editorial Index",
+    "nav": "N5",
+    "hero": "H1",
+    "footer": "Ft1",
+    "knobs": "hero=statement/xxl/left-bias/typographic; index=F6 spec-sheet/hairline; proof=P4 stat-strip; cta=C3 typographic; heads=S1 hanging",
+    "arc": "hook(H1) -> problem(prose) -> solution(F6) -> proof(P4) -> close(C3); how-it-works deliberately merged into solution",
+    "palette": "generate_palette.py --mood elegant --mode dark --seed 11, neutral ramp normalized to constant hue 86",
+    "brief": "AR Tanveer - Sr. Product Designer portfolio; dark editorial redesign of an existing light zinc site"
+  }
+]

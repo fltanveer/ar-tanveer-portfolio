@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { ChevronDown } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import React, { useEffect, useState } from 'react';
+import { ChevronUp } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 
 export function ScrollToTop() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 200);
+    const onScroll = () => setVisible(window.scrollY > 800);
+    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -15,16 +16,24 @@ export function ScrollToTop() {
     <AnimatePresence>
       {visible && (
         <motion.button
-          initial={{ opacity: 0, y: 10, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 10, scale: 0.9 }}
-          whileHover={{ scale: 1.1, backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
-          whileTap={{ scale: 0.9 }}
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-8 right-8 w-12 h-12 rounded-xl glass border border-slate-200 shadow-xl flex items-center justify-center cursor-pointer z-[200] text-slate-800"
-          aria-label="Scroll to top"
+          type="button"
+          // Entrance starts near full size, never from nothing.
+          initial={{ opacity: 0, transform: 'scale(0.94)' }}
+          animate={{ opacity: 1, transform: 'scale(1)' }}
+          exit={{ opacity: 0, transform: 'scale(0.94)' }}
+          transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
+          onClick={() =>
+            window.scrollTo({
+              top: 0,
+              behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+                ? 'auto'
+                : 'smooth',
+            })
+          }
+          aria-label="Back to top"
+          className="material-panel press fixed bottom-6 right-6 z-40 flex size-10 items-center justify-center rounded-full border border-line text-ink"
         >
-          <ChevronDown className="w-5 h-5 rotate-180" />
+          <ChevronUp className="size-[18px]" />
         </motion.button>
       )}
     </AnimatePresence>

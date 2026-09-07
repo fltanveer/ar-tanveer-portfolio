@@ -1,158 +1,713 @@
-@import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+/* tastemaker · macrostructure: Editorial Index · mood: apple-neutral · page: portfolio
+ * arc: hook(H1) -> problem(prose) -> solution(F6 index) -> proof(P4 stats) -> close(C3)
+ * nav: Apple global bar (translucent, content scrolls under) · hero: H1 statement fold
+ * palette: Apple dark — achromatic ground, single orange accent. No hue outside orange.
+ * contrast: pass (measured; orange fills take a black label — white on orange is 2.06)
+ * mode: single dark, no runtime toggle (brief-locked)
+ */
 
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   TIER 1 — PRIMITIVES.  Never referenced by a component.
+   Apple's own shipped dark values. The ground is achromatic: hierarchy comes
+   from luminance and material, never from hue. Exactly one chromatic family.
+--------------------------------------------------------------------------- */
 :root {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  --background-light: #ffffff; 
-  --foreground-light: #09090b; 
-  --background-dark: #09090b; 
-  --foreground-dark: #ffffff; 
-  --accent-color: #000000; 
+  --gray-1000: #000000; /* apple.com dark section ground */
+  --gray-950: #1d1d1f; /* Apple near-black panel */
+  --gray-900: #2c2c2e; /* iOS elevated dark surface */
+  --gray-850: #3a3a3c; /* iOS tertiary dark surface */
+  --gray-400: #aeaeb2; /* secondary text; clears 4.5 on all four surfaces */
+  --gray-50: #f5f5f7; /* Apple off-white. Never pure #fff for body text. */
+
+  /* One accent, both roles — iOS dark systemOrange.
+     As TEXT it clears 4.5 on all four surfaces (10.22 / 8.19 / 6.78 / 5.52).
+     As a FILL it takes a BLACK label (10.22); white on orange measures 2.06 and
+     fails badly — that's true of every orange worth using, not just this one,
+     so the label colour is the thing that changes, not the accent. */
+  --orange-500: #ff9f0a;
+}
+
+/* ---------------------------------------------------------------------------
+   TIER 2 — SEMANTICS.  The only tier components reference.
+--------------------------------------------------------------------------- */
+@theme {
+  --color-page: var(--gray-1000);
+  --color-surface: var(--gray-950);
+  --color-raised: var(--gray-900);
+  --color-overlay: var(--gray-850);
+
+  --color-ink: var(--gray-50);
+  --color-ink-soft: var(--gray-400);
+
+  --color-line: rgb(255 255 255 / 0.11);
+  --color-line-strong: rgb(255 255 255 / 0.2);
+
+  --color-link: var(--orange-500);
+  --color-fill: var(--orange-500);
+  --color-on-fill: #000000;
+
+  /* The platform font ships optical sizing, tracking tables and legibility
+     tuning already — on Apple hardware this resolves to the real SF Pro.
+     Inter is the cross-platform stand-in, not the first choice. */
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', 'Inter',
+    system-ui, sans-serif;
+
+  /* Apple shape language: soft-square cards, fully-round controls. */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 28px;
+  --radius-pill: 980px;
+
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  /* Apple's own curve for reversible chrome transitions. */
+  --ease-apple: cubic-bezier(0.28, 0.11, 0.32, 1);
+}
+
+/* ---------------------------------------------------------------------------
+   BASE
+--------------------------------------------------------------------------- */
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Chrome sits over content; anchored targets need clearance. */
+  scroll-padding-top: 4rem;
 }
 
 body {
-  background-color: var(--background-light);
-  color: var(--foreground-light);
-  transition: background-color 0.3s ease, color 0.3s ease;
-  min-height: 100vh;
-  position: relative;
+  background-color: var(--color-page);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-synthesis-weight: none;
+  min-height: 100dvh;
   overflow-x: hidden;
+  text-wrap: pretty;
 }
 
-/* Dark mode */
-.dark {
-  --background-light: #0f172a; /* slate-900 */
-  --foreground-light: #f8fafc; /* slate-50 */
-  --background-dark: #f8fafc; /* slate-50 */
-  --foreground-dark: #0f172a; /* slate-900 */
+::selection {
+  background: var(--color-link);
+  color: #000;
 }
 
-.dark body {
-  background-color: var(--background-light);
-  color: var(--foreground-light);
+:focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
-/* Animated aura background */
-.aura-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: -2;
-  overflow: hidden;
+/* ---------------------------------------------------------------------------
+   TYPE — tracking is size-specific. A single letter-spacing value is wrong
+   somewhere: large text reads too loose as it grows, small text too tight.
+--------------------------------------------------------------------------- */
+.t-display {
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
 }
 
-.aura-light, .aura-dark {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(120px);
-  opacity: 0.15;
-  animation: float 8s ease-in-out infinite;
+.t-title {
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
-.aura-light {
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, rgba(59, 130, 246, 0) 70%);
-  width: 400px;
-  height: 400px;
+.t-heading {
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
 }
 
-.aura-dark {
-  background: radial-gradient(circle, rgba(147, 51, 234, 0.3) 0%, rgba(147, 51, 234, 0) 70%);
-  width: 500px;
-  height: 500px;
+.t-body {
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0;
 }
 
-@keyframes float {
-  0%, 100% {
-    transform: translate(0, 0) scale(1);
+/* Small text gets slightly POSITIVE tracking — the inverse of display. */
+.t-label {
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+/* ---------------------------------------------------------------------------
+   IMAGE TREATMENT
+   Most captures are light-UI dashboards. A white plane on this ground measures
+   21:1 — harsher than the body text, ~15 stacked per page. Rest them; restore
+   full fidelity on interaction so the work is never misrepresented.
+--------------------------------------------------------------------------- */
+.capture {
+  filter: brightness(0.9);
+  transition: filter 240ms var(--ease-apple);
+}
+
+.capture-frame:hover .capture,
+.capture-frame:focus-within .capture {
+  filter: brightness(1);
+}
+
+/* ---------------------------------------------------------------------------
+   MATERIAL — translucent chrome with content scrolling underneath, not an
+   opaque bar consuming a fixed strip.
+--------------------------------------------------------------------------- */
+.material-chrome {
+  background: rgb(0 0 0 / 0.72);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+}
+
+.material-panel {
+  background: rgb(29 29 31 / 0.86);
+  backdrop-filter: saturate(180%) blur(30px);
+  -webkit-backdrop-filter: saturate(180%) blur(30px);
+}
+
+/* Transparency is a preference, not a given. Go solid when it's turned down. */
+@media (prefers-reduced-transparency: reduce) {
+  .material-chrome {
+    background: var(--color-page);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
+
+  .material-panel {
+    background: var(--color-surface);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
-  66% {
-    transform: translate(-20px, 30px) scale(0.9);
+}
+
+@media (prefers-contrast: more) {
+  .material-chrome,
+  .material-panel {
+    background: var(--color-page);
+    backdrop-filter: none;
+    border-color: var(--color-line-strong);
   }
 }
 
-.dark .aura-light {
-  display: none;
-}
-
-.dark .aura-dark {
-  display: block;
-}
-
-.light .aura-light {
-  display: block;
-}
-
-.light .aura-dark {
-  display: none;
-}
-
-/* Glassmorphism Utility */
-.glass {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.dark .glass {
-  background: rgba(15, 23, 42, 0.5);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(15, 23, 42, 0.3);
-}
-
-/* Custom Scrollbar Styles */
+/* ---------------------------------------------------------------------------
+   SCROLLBAR
+--------------------------------------------------------------------------- */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
-  margin-top: 20px;
-  margin-bottom: 20px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1; /* slate-300 */
+  background-color: rgb(255 255 255 / 0.16);
   border-radius: 20px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: #94a3b8; /* slate-400 */
+  background-color: rgb(255 255 255 / 0.28);
 }
 
-.dark .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #64748b; /* slate-500 */
+/* ---------------------------------------------------------------------------
+   MOTION
+--------------------------------------------------------------------------- */
+@media (hover: hover) and (pointer: fine) {
+  .lift {
+    transition: transform 400ms var(--ease-apple);
+  }
+
+  .lift:hover {
+    transform: scale(1.012);
+  }
 }
 
-.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: #94a3b8; /* slate-400 */
+/* Feedback on press, not release. */
+.press {
+  transition: transform 100ms ease-out;
 }
 
-/* Motion variants for page transitions */
-.page-enter {
+.press:active {
+  transform: scale(0.97);
+}
+
+/* ---------------------------------------------------------------------------
+   TOKEN FLOW — the pulse that runs the rail when a token is selected.
+   It encodes direction: Figma is upstream, the class a dev types is downstream.
+   A one-shot 900ms paint on a 1px strip, so background-position is the right
+   tool here — no layout, and it flips orientation with the rail for free.
+--------------------------------------------------------------------------- */
+.flow-pulse {
+  background-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--color-link) 50%,
+    transparent 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 26%;
+  animation: flow-run-y 900ms var(--ease-out-strong) both;
+}
+
+@keyframes flow-run-y {
+  from {
+    background-position: 0 -30%;
+    opacity: 0;
+  }
+  20%,
+  80% {
+    opacity: 1;
+  }
+  to {
+    background-position: 0 130%;
+    opacity: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .flow-pulse {
+    background-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--color-link) 50%,
+      transparent 100%
+    );
+    background-size: 26% 100%;
+    animation-name: flow-run-x;
+  }
+}
+
+@keyframes flow-run-x {
+  from {
+    background-position: -30% 0;
+    opacity: 0;
+  }
+  20%,
+  80% {
+    opacity: 1;
+  }
+  to {
+    background-position: 130% 0;
+    opacity: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   HERO GLITCH
+   Two displaced copies over a clean base, idle for ~90% of the cycle and firing
+   as a ~0.6s burst every 7s. A continuous glitch stops reading as a signature
+   and starts reading as a broken image, so the keyframes are mostly identity.
+
+   The displaced layers are tinted with sepia/hue-rotate rather than an RGB
+   channel split: a cyan-magenta fringe would put two hues in a page that allows
+   exactly one, where this lands in the accent's own family.
+
+   Only clip-path, transform and opacity move. `screen` blending means the layers
+   add light on the black ground and vanish completely at opacity 0.
+--------------------------------------------------------------------------- */
+
+/* No `position` here: the element takes `absolute` from a utility class, and a
+   position declared in this file would win the cascade and drop it back into
+   flow. Absolute already establishes the containing block the layers need. */
+.glitch {
+  isolation: isolate;
+}
+
+.glitch-layer {
+  position: absolute;
+  inset: 0;
   opacity: 0;
-  scale: 0.98;
+  mix-blend-mode: screen;
+  will-change: clip-path, transform, opacity;
 }
-.page-enter-active {
-  opacity: 1;
-  scale: 1;
-  transition: opacity 300ms, scale 300ms;
+
+.glitch-a {
+  filter: sepia(1) saturate(5) hue-rotate(-8deg);
+  animation: glitch-a 7s steps(1, end) infinite;
 }
-.page-exit {
-  opacity: 1;
-  scale: 1;
+
+.glitch-b {
+  filter: grayscale(1) brightness(1.5);
+  animation: glitch-b 7s steps(1, end) 0.06s infinite;
 }
-.page-exit-active {
+
+@keyframes glitch-a {
+  0%,
+  85%,
+  96%,
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+    clip-path: inset(0 0 0 0);
+  }
+  86% {
+    opacity: 0.85;
+    transform: translate3d(-11px, 0, 0);
+    clip-path: inset(16% 0 63% 0);
+  }
+  89% {
+    opacity: 0.75;
+    transform: translate3d(8px, 0, 0);
+    clip-path: inset(54% 0 31% 0);
+  }
+  92% {
+    opacity: 0.8;
+    transform: translate3d(-6px, 0, 0);
+    clip-path: inset(6% 0 80% 0);
+  }
+  94% {
+    opacity: 0.6;
+    transform: translate3d(13px, 0, 0);
+    clip-path: inset(72% 0 11% 0);
+  }
+}
+
+@keyframes glitch-b {
+  0%,
+  85%,
+  96%,
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+    clip-path: inset(0 0 0 0);
+  }
+  87% {
+    opacity: 0.5;
+    transform: translate3d(9px, 0, 0);
+    clip-path: inset(38% 0 49% 0);
+  }
+  90% {
+    opacity: 0.45;
+    transform: translate3d(-12px, 0, 0);
+    clip-path: inset(24% 0 66% 0);
+  }
+  93% {
+    opacity: 0.4;
+    transform: translate3d(6px, 0, 0);
+    clip-path: inset(64% 0 22% 0);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   PAGE AURA — orange wash from the top-right of a section page, with that
+   page's own menu icon repeated inside it as a faint motif.
+
+   Softened deliberately: this sits behind a page heading and its whole job is to
+   be felt rather than looked at. The wash dies well before it reaches the copy
+   column, and the marks are dark rather than orange, so they read as cut-outs in
+   the glow instead of another light source competing with it.
+
+   Drift is on `translate`, leaving `rotate` free to hold each mark's static
+   angle — two independent properties, so the loop can't overwrite the tilt.
+--------------------------------------------------------------------------- */
+.page-aura {
+  background:
+    radial-gradient(
+      48rem 28rem at 100% 0%,
+      rgb(255 159 10 / 0.34) 0%,
+      rgb(255 159 10 / 0.11) 38%,
+      transparent 68%
+    ),
+    radial-gradient(24rem 15rem at 92% 4%, rgb(255 159 10 / 0.16) 0%, transparent 60%);
+}
+
+/* Three independent properties, one job each, so none overwrites another:
+   `translate` drifts, `rotate` wobbles around the mark's resting angle held in
+   --rot, `scale` breathes. Two keyframe sets running in opposition, assigned
+   alternately, so the group never moves as one block. Cycles are 11-17s, still
+   far under the ~0.2 Hz band that reads as a nauseating oscillation. */
+.aura-mark {
+  rotate: var(--rot, 0deg);
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.aura-mark-a {
+  animation-name: aura-drift-a;
+}
+
+.aura-mark-b {
+  animation-name: aura-drift-b;
+}
+
+@keyframes aura-drift-a {
+  0%,
+  100% {
+    translate: -8px -9px;
+    rotate: calc(var(--rot, 0deg) - 4deg);
+    scale: 1;
+  }
+  50% {
+    translate: 8px 9px;
+    rotate: calc(var(--rot, 0deg) + 4deg);
+    scale: 1.08;
+  }
+}
+
+@keyframes aura-drift-b {
+  0%,
+  100% {
+    translate: 9px 7px;
+    rotate: calc(var(--rot, 0deg) + 3deg);
+    scale: 1.06;
+  }
+  50% {
+    translate: -9px -7px;
+    rotate: calc(var(--rot, 0deg) - 3deg);
+    scale: 0.95;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   PRINCIPLES — one observer, one state, choreography in CSS.
+
+   The order is the point: the rules draw left to right, then each column lands
+   in sequence, then the closing line. A single IntersectionObserver fires it and
+   `--i` on each column carries the stagger, so there is no per-item observer and
+   no JS running once it has played.
+
+   The block opts out of the default reveal rise: the wrapper travelling while
+   the words wipe reads as two animations fighting for the same moment.
+--------------------------------------------------------------------------- */
+.principles[data-reveal='out'] {
+  transform: none;
+}
+
+/* The two rules are always-on hairlines. A glowing segment sweeps along them and
+   hands off between them: top left-to-right, then bottom right-to-left, forever.
+
+   14s cycle, so each pass takes about 6 seconds. Slow on purpose — it is a
+   background rhythm behind three words someone is reading, not a progress bar.
+
+   Movement is `translate` only, in percentages of the segment's own width, so
+   the loop never touches layout. The segment is 25% of the track, so travelling
+   from fully off the left to fully off the right is 500% of itself.
+
+   The bottom segment is the same element mirrored with scaleX(-1): that flips
+   the gradient and puts the dot on the leading edge for a right-to-left run,
+   with no second set of keyframes to keep in sync. */
+.p-lead {
+  position: relative;
+  display: block;
+  height: 1px;
+  background: var(--color-line);
+}
+
+.p-sweep {
+  position: absolute;
+  top: 0;
+  left: -25%;
+  height: 1px;
+  width: 25%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(255 159 10 / 0.14) 45%,
+    rgb(255 159 10 / 0.8) 100%
+  );
   opacity: 0;
-  scale: 1.02;
-  transition: opacity 300ms, scale 300ms;
+}
+
+/* The dot rides the segment's leading edge, so one animation carries both. */
+.p-sweep::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  height: 7px;
+  width: 7px;
+  translate: 50% -50%;
+  border-radius: 999px;
+  background: var(--color-fill);
+  box-shadow: 0 0 14px 3px rgb(255 159 10 / 0.5);
+}
+
+.p-sweep-top {
+  animation: p-sweep-first 14s linear infinite;
+}
+
+.p-sweep-bottom {
+  transform: scaleX(-1);
+  animation: p-sweep-second 14s linear infinite;
+}
+
+/* Runs in the first half, rests through the second while the bottom takes over. */
+@keyframes p-sweep-first {
+  0% {
+    translate: 0;
+    opacity: 0;
+  }
+  2%,
+  43% {
+    opacity: 1;
+  }
+  45%,
+  100% {
+    translate: 500%;
+    opacity: 0;
+  }
+}
+
+/* Rests first, then runs the other way. scaleX(-1) mirrors the gradient and the
+   dot inside the box, but it does not reverse the direction of travel — so the
+   return pass needs its own keyframes counting down from 500% rather than up. */
+@keyframes p-sweep-second {
+  0%,
+  50% {
+    translate: 500%;
+    opacity: 0;
+  }
+  52% {
+    opacity: 1;
+  }
+  93% {
+    opacity: 1;
+  }
+  95%,
+  100% {
+    translate: 0;
+    opacity: 0;
+  }
+}
+
+.p-word {
+  transition: clip-path 700ms var(--ease-out-strong);
+  transition-delay: calc(150ms + var(--i, 0) * 130ms);
+}
+
+[data-reveal='out'] .p-word {
+  clip-path: inset(0 100% 0 0);
+}
+
+[data-reveal='in'] .p-word {
+  clip-path: inset(0 0 0 0);
+}
+
+.p-num {
+  transition:
+    opacity 460ms ease,
+    translate 460ms var(--ease-out-strong);
+  transition-delay: calc(110ms + var(--i, 0) * 130ms);
+}
+
+.p-gloss {
+  transition:
+    opacity 560ms ease,
+    translate 560ms var(--ease-out-strong);
+  transition-delay: calc(300ms + var(--i, 0) * 130ms);
+}
+
+.p-close {
+  transition:
+    opacity 560ms ease,
+    translate 560ms var(--ease-out-strong);
+  transition-delay: 700ms;
+}
+
+[data-reveal='out'] .p-num,
+[data-reveal='out'] .p-gloss,
+[data-reveal='out'] .p-close {
+  opacity: 0;
+  translate: 0 10px;
+}
+
+[data-reveal='in'] .p-num,
+[data-reveal='in'] .p-gloss,
+[data-reveal='in'] .p-close {
+  opacity: 1;
+  translate: 0 0;
+}
+
+[data-reveal] {
+  transition:
+    opacity 700ms var(--ease-apple),
+    transform 700ms var(--ease-apple);
+}
+
+[data-reveal='out'] {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+[data-reveal='in'] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Reduced motion means gentler, not none: movement goes, opacity stays so
+   nothing loses its affordance. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .capture {
+    transition: none;
+  }
+
+  .lift:hover {
+    transform: none;
+  }
+
+  .aura-mark {
+    animation: none;
+    translate: none;
+    scale: none;
+  }
+
+  .glitch-layer {
+    animation: none;
+    opacity: 0;
+  }
+
+  .flow-pulse {
+    animation: none;
+    opacity: 0;
+  }
+
+  [data-reveal='out'] {
+    opacity: 0;
+    transform: none;
+  }
+
+  [data-reveal='in'] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .p-sweep {
+    animation: none;
+    display: none;
+  }
+
+  .p-word {
+    clip-path: none;
+  }
+
+  [data-reveal='out'] .p-num,
+  [data-reveal='out'] .p-gloss,
+  [data-reveal='out'] .p-close {
+    translate: none;
+  }
 }
