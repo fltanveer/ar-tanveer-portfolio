@@ -2,6 +2,7 @@ import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
+import { UpworkMark } from '../components/BrandMarks';
 import { HeroPhoto } from '../components/HeroPhoto';
 import { RibbonMesh } from '../components/RibbonMesh';
 import { Reveal } from '../components/Reveal';
@@ -87,8 +88,9 @@ export function HomePage() {
               href={UPWORK_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex min-h-[24px] items-center text-[17px] text-link transition-opacity duration-200 hover:opacity-80"
+              className="group inline-flex min-h-[24px] items-center gap-2 text-[17px] text-link transition-opacity duration-200 hover:opacity-80"
             >
+              <UpworkMark className="size-5" />
               Hire me on Upwork
               <ChevronRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
             </a>
@@ -327,8 +329,9 @@ export function HomePage() {
             href={UPWORK_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="group mt-8 inline-flex min-h-[24px] items-center text-[19px] text-link transition-opacity duration-200 hover:opacity-80"
+            className="group mt-8 inline-flex min-h-[24px] items-center gap-2 text-[19px] text-link transition-opacity duration-200 hover:opacity-80"
           >
+            <UpworkMark className="size-[22px]" />
             Start a conversation
             <ChevronRight className="size-[18px] transition-transform duration-200 group-hover:translate-x-0.5" />
           </a>

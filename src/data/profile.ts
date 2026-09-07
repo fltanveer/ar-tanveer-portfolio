@@ -25,6 +25,8 @@ export const identity = {
   title: 'Sr. Product Designer',
   location: 'Dhaka, Bangladesh',
   linkedin: 'https://www.linkedin.com/in/artanveer/',
+  github: 'https://github.com/fltanveer',
+  upwork: 'https://www.upwork.com/freelancers/~01e721b548af79f7c9?mp_source=share',
   avatar: '/up.webp',
 };
 

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { AnimatePresence, MotionConfig, motion } from 'motion/react';
+import { GithubMark, UpworkMark } from './components/BrandMarks';
 import { PageAura } from './components/PageAura';
+import { identity } from './data/profile';
 import { ProfileDrawer } from './components/ProfileDrawer';
 import { ScrollToTop } from './components/ScrollToTop';
 import { SideRail } from './components/SideRail';
@@ -34,14 +36,23 @@ function Footer() {
         Designed and built by Md Ashrafur Rahman Tanveer in Dhaka, Bangladesh.
       </p>
       <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
-        <a
-          href="https://www.linkedin.com/in/artanveer/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex min-h-[24px] items-center text-xs text-link transition-opacity duration-200 hover:opacity-80"
-        >
-          LinkedIn
-        </a>
+        {[
+          { label: 'GitHub', href: identity.github, Mark: GithubMark },
+          { label: 'Upwork', href: identity.upwork, Mark: UpworkMark },
+        ].map((l) => (
+          <a
+            key={l.label}
+            href={l.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-[24px] items-center gap-1.5 text-xs text-link transition-opacity duration-200 hover:opacity-80"
+          >
+            {/* Decorative: the label beside it already carries the name, so a
+                second announcement would just repeat it. */}
+            <l.Mark className="size-4" />
+            {l.label}
+          </a>
+        ))}
       </div>
     </footer>
   );

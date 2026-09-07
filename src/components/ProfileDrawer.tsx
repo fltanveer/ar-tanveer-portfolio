@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Award, Briefcase, ChevronDown, GraduationCap, Linkedin, MapPin, Star, X } from 'lucide-react';
+import { Award, Briefcase, ChevronDown, GraduationCap, MapPin, Star, X } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import {
   about,
@@ -228,15 +228,25 @@ export function ProfileDrawer({ open, onClose }: { open: boolean; onClose: () =>
               </div>
             </div>
 
-            <div className="border-t border-line p-5">
+            {/* One filled action only. GitHub sits beside it as a neutral
+                control rather than a second primary, so the pair still reads as
+                one obvious action and one alternative. */}
+            <div className="flex gap-2 border-t border-line p-5">
               <a
                 href={identity.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="press flex w-full items-center justify-center gap-2 rounded-[980px] bg-fill py-3 text-sm text-on-fill transition-opacity duration-200 hover:opacity-90"
+                className="press flex flex-1 items-center justify-center gap-2 rounded-[980px] bg-fill py-3 text-sm text-on-fill transition-opacity duration-200 hover:opacity-90"
               >
-                <Linkedin className="size-4" />
-                View LinkedIn profile
+                LinkedIn
+              </a>
+              <a
+                href={identity.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="press flex flex-1 items-center justify-center gap-2 rounded-[980px] bg-raised py-3 text-sm text-ink transition-colors duration-200 hover:bg-overlay"
+              >
+                GitHub
               </a>
             </div>
           </motion.div>
