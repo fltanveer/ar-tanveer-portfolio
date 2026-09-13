@@ -1,0 +1,50 @@
+/* App Screenshots · same dark app shell as Email Templates. The panels carry
+   their own palettes; the page stays neutral around them. */
+.shots-header { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 56px; }
+.shots-header > p { flex-shrink: 0; padding-bottom: 3px; }
+.shots-set + .shots-set { margin-top: 72px; }
+.shots-set-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+.shots-figma { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 4px; font-size: 13px; color: var(--color-link); white-space: nowrap; }
+/* Five across on wide screens; a swipeable row below that, like the store. */
+.shots-row { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; list-style: none; padding: 0; margin: 0; }
+.shots-panel { position: relative; display: block; width: 100%; overflow: hidden; border-radius: 18px; background: var(--color-surface); cursor: zoom-in; transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1); }
+.shots-panel img { display: block; width: 100%; height: auto; aspect-ratio: 430 / 932; }
+.shots-panel:focus-visible { outline: 2px solid var(--color-link); outline-offset: 4px; }
+.shots-panel:active { transform: scale(0.98); }
+@media (max-width: 1023px) {
+  .shots-row { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; margin-inline: -20px; padding-inline: 20px; scroll-padding-inline: 20px; scrollbar-width: none; }
+  .shots-row::-webkit-scrollbar { display: none; }
+  .shots-row > li { flex: 0 0 min(42vw, 240px); scroll-snap-align: start; }
+}
+@media (max-width: 639px) {
+  .shots-header { display: block; margin-bottom: 40px; }
+  .shots-header > p { margin-top: 20px; }
+  .shots-set + .shots-set { margin-top: 56px; }
+  .shots-row > li { flex-basis: 62vw; }
+}
+
+.shots-dialog { padding: 0; border: 0; background: transparent; color: var(--color-ink); max-width: none; max-height: none; width: 100vw; height: 100dvh; margin: 0; overflow: hidden; }
+.shots-dialog::backdrop { background: rgb(0 0 0 / .88); backdrop-filter: blur(12px); }
+.shots-dialog-inner { display: grid; grid-template-rows: auto 1fr auto; height: 100%; padding: 16px 20px 20px; }
+.shots-dialog-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.shots-dialog-stage { display: flex; align-items: center; justify-content: center; gap: 20px; min-height: 0; padding-block: 16px; }
+.shots-dialog-stage img { display: block; height: 100%; max-height: 880px; width: auto; max-width: 100%; aspect-ratio: 430 / 932; object-fit: contain; border-radius: 22px; }
+.shots-dialog-button { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: 980px; color: var(--color-ink); background: var(--color-raised); cursor: pointer; transition: background-color 150ms; }
+.shots-dialog-button:active { background: var(--color-overlay); }
+.shots-dialog-button:focus-visible { outline: 2px solid var(--color-link); outline-offset: 3px; }
+.shots-dots { display: flex; justify-content: center; gap: 8px; }
+.shots-dots span { width: 6px; height: 6px; border-radius: 9px; background: var(--color-line-strong); transition: width 180ms cubic-bezier(0.23, 1, 0.32, 1), background-color 180ms; }
+.shots-dots span[data-on="true"] { width: 20px; background: var(--color-ink); }
+@media (hover: hover) and (pointer: fine) {
+  .shots-panel:hover { transform: translateY(-3px); }
+  .shots-dialog-button:hover { background: var(--color-overlay); }
+}
+@media (max-width: 639px) {
+  .shots-dialog-inner { padding: 12px; }
+  .shots-dialog-stage { gap: 8px; }
+  .shots-dialog-stage .shots-dialog-button { position: absolute; bottom: 20px; }
+  .shots-dialog-stage .shots-dialog-button:first-child { left: 20px; }
+  .shots-dialog-stage .shots-dialog-button:last-child { right: 20px; }
+}
+@media (prefers-reduced-motion: reduce) { .shots-panel, .shots-dots span, .shots-dialog-button { transition: none; } .shots-panel:hover, .shots-panel:active { transform: none; } }
+@media (prefers-reduced-transparency: reduce) { .shots-dialog::backdrop { background: var(--color-page); backdrop-filter: none; } }

@@ -9,6 +9,7 @@ import { ScrollToTop } from './components/ScrollToTop';
 import { SideRail } from './components/SideRail';
 import { menuItems, utilityNav } from './data/sections';
 import { AppDesignPage } from './pages/AppDesignPage';
+import { AppScreenshotsPage } from './pages/AppScreenshotsPage';
 import { DashboardsPage } from './pages/DashboardsPage';
 import { HandoffPage } from './pages/HandoffPage';
 import { EmailTemplatesPage } from './pages/EmailTemplatesPage';
@@ -107,6 +108,7 @@ function Layout() {
               <Route path="/dashboards/:slug" element={<DashboardsPage />} />
               <Route path="/vibecode" element={<VibeCodePage />} />
               <Route path="/email-templates" element={<EmailTemplatesPage />} />
+              <Route path="/app-screenshots" element={<AppScreenshotsPage />} />
               <Route path="/handoff" element={<HandoffPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

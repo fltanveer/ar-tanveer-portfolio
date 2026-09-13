@@ -8,6 +8,7 @@ import {
   Boxes,
   Code2,
   GitCompareArrows,
+  Images,
   LayoutDashboard,
   Mail,
   Rocket,
@@ -95,6 +96,14 @@ const emailTemplatesNav = {
   path: '/email-templates',
 };
 
+/** Same reasoning as Email Templates: concept work, numbered last in the menu. */
+const appScreenshotsNav = {
+  section: 'app-screenshots',
+  icon: Images,
+  label: 'App Screenshots',
+  path: '/app-screenshots',
+};
+
 const vibeCodeAt = sections.findIndex((s) => s.section === 'vibecode');
 
 /** The numbered menu, in display order. */
@@ -102,6 +111,7 @@ export const menuItems = [
   ...sections.slice(0, vibeCodeAt),
   emailTemplatesNav,
   ...sections.slice(vibeCodeAt),
+  appScreenshotsNav,
 ];
 
 /** A page's number in the menu (1-based), so page eyebrows match the rail. */
