@@ -96,7 +96,7 @@ const emailTemplatesNav = {
   path: '/email-templates',
 };
 
-/** Same reasoning as Email Templates: concept work, numbered last in the menu. */
+/** Same reasoning as Email Templates: concept work, numbered after it and before Vibe Code. */
 const appScreenshotsNav = {
   section: 'app-screenshots',
   icon: Images,
@@ -110,8 +110,8 @@ const vibeCodeAt = sections.findIndex((s) => s.section === 'vibecode');
 export const menuItems = [
   ...sections.slice(0, vibeCodeAt),
   emailTemplatesNav,
-  ...sections.slice(vibeCodeAt),
   appScreenshotsNav,
+  ...sections.slice(vibeCodeAt),
 ];
 
 /** A page's number in the menu (1-based), so page eyebrows match the rail. */
