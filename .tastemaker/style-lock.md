@@ -165,3 +165,12 @@ AI-drawn SVG humans read as cheap and this is a real person's likeness.
 - No white text on the orange fill — it measures 2.06. The label is black.
 - No invented numbers. Only what's countable from `src/data`: **33 projects · 5 areas ·
   3 countries · 4 certifications**.
+
+
+## Email concepts — 2026-09-13
+
+User requested six rebranded email concepts with original generated imagery. The portfolio chrome retains the locked dark/orange system. Independent email canvases are an explicit scope exception for color, type, and imagery: Still (sage/forest), FORM (terracotta/espresso), AURE (rose/oxblood), Offday (cobalt/butter), Sunday Table (paprika/cream), Fieldwork (ochre/olive). HTML email styles are inline for portability.
+
+Gallery uses the existing Reveal component, native dialog behavior, full uncropped previews, and 28–32px column gaps. Assets and prompt provenance live in `public/email-templates/`. Palette pairings are verified during this build; no preference is promoted to the personal profile.
+
+Email color check: 16 body/button pairs pass 4.5:1; minimum 5.57:1.

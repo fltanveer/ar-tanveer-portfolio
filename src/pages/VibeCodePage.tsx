@@ -2,12 +2,12 @@ import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import { PageHeader } from '../components/PageHeader';
 import { Reveal } from '../components/Reveal';
-import { sections } from '../data/sections';
+import { menuNumber, sections } from '../data/sections';
 import { vibeSites } from '../data/vibeSites';
 
 export function VibeCodePage() {
   const meta = sections.find((s) => s.section === 'vibecode');
-  const index = sections.findIndex((s) => s.section === 'vibecode') + 1;
+  const index = menuNumber('vibecode');
 
   return (
     <div className="px-5 py-14 sm:px-8 md:py-20 lg:px-16">

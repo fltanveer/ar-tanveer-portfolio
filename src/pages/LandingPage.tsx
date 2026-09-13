@@ -4,13 +4,13 @@ import { AnimatePresence, motion } from 'motion/react';
 import { PageHeader } from '../components/PageHeader';
 import { ProjectCard } from '../components/ProjectCard';
 import { landingPagesData } from '../data/projects';
-import { sections } from '../data/sections';
+import { menuNumber, sections } from '../data/sections';
 import { shareUrlFor, toSlug } from '../lib/slug';
 
 export function LandingPage() {
   const { slug } = useParams<{ slug?: string }>();
   const meta = sections.find((s) => s.section === 'landing');
-  const index = sections.findIndex((s) => s.section === 'landing') + 1;
+  const index = menuNumber('landing');
 
   // Derived from the URL, not mirrored into state: the route is already the single
   // source of truth, and duplicating it into useState is how the two drift apart.

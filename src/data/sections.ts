@@ -9,6 +9,7 @@ import {
   Code2,
   GitCompareArrows,
   LayoutDashboard,
+  Mail,
   Rocket,
   Smartphone,
   type LucideIcon,
@@ -83,9 +84,34 @@ export const sections: SectionMeta[] = [
 ];
 
 /**
- * Not a project collection, so deliberately NOT in `sections` — putting it there
- * would fold a process page into the "33 projects" figure and quietly make that
- * number a lie.
+ * Email Templates are concepts, not portfolio projects, so they stay out of
+ * `sections` and out of the project totals. They are still numbered in the
+ * menu, directly before Vibe Code.
+ */
+const emailTemplatesNav = {
+  section: 'email-templates',
+  icon: Mail,
+  label: 'Email Templates',
+  path: '/email-templates',
+};
+
+const vibeCodeAt = sections.findIndex((s) => s.section === 'vibecode');
+
+/** The numbered menu, in display order. */
+export const menuItems = [
+  ...sections.slice(0, vibeCodeAt),
+  emailTemplatesNav,
+  ...sections.slice(vibeCodeAt),
+];
+
+/** A page's number in the menu (1-based), so page eyebrows match the rail. */
+export const menuNumber = (section: string) =>
+  menuItems.findIndex((item) => item.section === section) + 1;
+
+/**
+ * Process pages, deliberately NOT in `sections` or the numbered menu. Putting
+ * one there would fold a process page into the project figure and quietly make
+ * that number a lie.
  */
 export const utilityNav = [
   {

@@ -7,10 +7,11 @@ import { identity } from './data/profile';
 import { ProfileDrawer } from './components/ProfileDrawer';
 import { ScrollToTop } from './components/ScrollToTop';
 import { SideRail } from './components/SideRail';
-import { sections, utilityNav } from './data/sections';
+import { menuItems, utilityNav } from './data/sections';
 import { AppDesignPage } from './pages/AppDesignPage';
 import { DashboardsPage } from './pages/DashboardsPage';
 import { HandoffPage } from './pages/HandoffPage';
+import { EmailTemplatesPage } from './pages/EmailTemplatesPage';
 import { HomePage } from './pages/HomePage';
 import { LandingPage } from './pages/LandingPage';
 import { SaaSPage } from './pages/SaaSPage';
@@ -73,7 +74,7 @@ function Layout() {
       </a>
 
       <SideRail
-        items={sections}
+        items={menuItems}
         utility={utilityNav}
         onOpenProfile={() => setProfileOpen(true)}
       />
@@ -105,6 +106,7 @@ function Layout() {
               <Route path="/dashboards" element={<DashboardsPage />} />
               <Route path="/dashboards/:slug" element={<DashboardsPage />} />
               <Route path="/vibecode" element={<VibeCodePage />} />
+              <Route path="/email-templates" element={<EmailTemplatesPage />} />
               <Route path="/handoff" element={<HandoffPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { PageHeader } from './PageHeader';
 import { ProjectCard } from './ProjectCard';
 import { Project } from '../data/projects';
-import { sections } from '../data/sections';
+import { menuNumber, sections } from '../data/sections';
 import { shareUrlFor, toSlug } from '../lib/slug';
 
 /** Shared shape for the stacked gallery sections (SaaS, App Design, Dashboards). */
@@ -18,7 +18,7 @@ export function ProjectList({
 }) {
   const { slug } = useParams<{ slug?: string }>();
   const meta = sections.find((s) => s.section === section);
-  const index = sections.findIndex((s) => s.section === section) + 1;
+  const index = menuNumber(section);
 
   return (
     <div className="px-5 py-14 sm:px-8 md:py-20 lg:px-16">

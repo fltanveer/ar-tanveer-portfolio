@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { sections, utilityNav } from '../data/sections';
+import { menuItems, utilityNav } from '../data/sections';
 
 /**
  * Orange wash in the top-right of a section page, carrying that page's own menu
@@ -20,7 +20,7 @@ import { sections, utilityNav } from '../data/sections';
  */
 
 const lookup = [
-  ...sections.map((s) => ({ section: s.section, Icon: s.icon })),
+  ...menuItems.map((s) => ({ section: s.section, Icon: s.icon })),
   ...utilityNav.map((u) => ({ section: u.section, Icon: u.icon })),
 ];
 

@@ -10,5 +10,24 @@
     "arc": "hook(H1) -> problem(prose) -> solution(F6) -> proof(P4) -> close(C3); how-it-works deliberately merged into solution",
     "palette": "generate_palette.py --mood elegant --mode dark --seed 11, neutral ramp normalized to constant hue 86",
     "brief": "AR Tanveer - Sr. Product Designer portfolio; dark editorial redesign of an existing light zinc site"
+  },
+  {
+    "date": "2026-09-13",
+    "page": "email-templates",
+    "macrostructure": "Staggered gallery",
+    "nav": "Existing left rail with Email Templates utility entry",
+    "hero": "Compact collection header",
+    "footer": "Existing portfolio footer",
+    "knobs": "3 desktop columns / 2 tablet / 1 mobile; full uncropped previews; native dialog; URL-linked selections",
+    "arc": "browse -> preview -> open editable HTML",
+    "brief": "Six original fictional email concepts from user references, custom generated art and independent brand palettes",
+    "critique": {
+      "showTell": 5,
+      "philosophy": 4,
+      "hierarchy": 5,
+      "specificity": 5,
+      "restraint": 5,
+      "variety": 5
+    }
   }
 ]

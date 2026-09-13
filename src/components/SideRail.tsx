@@ -110,7 +110,7 @@ export function SideRail({
         </ul>
       </nav>
       {utility.length > 0 && (
-        <nav aria-label="Process" className="mt-2 border-t border-line pt-2">
+        <nav aria-label="More work and process" className="mt-2 border-t border-line pt-2">
           <ul className="flex flex-col gap-0.5 px-2">
             {utility.map((item) => (
               <Row key={item.section} item={item} onNavigate={onNavigate} />

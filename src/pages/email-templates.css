@@ -1,0 +1,47 @@
+/* tastemaker · app shell / staggered gallery · existing Apple dark tokens.
+   Original campaign canvases have independent palettes by user request.
+   critique: ShowTell 5 · Phil 4 · Hier 5 · Spec 5 · Restr 5 · Var 5 */
+.email-gallery-header { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 48px; }
+.email-gallery-header > p { flex-shrink: 0; padding-bottom: 3px; }
+/* Flex columns filled round-robin in the component, so the first templates
+   sit across the top row. CSS columns would stack them down column one. */
+.email-masonry { display: flex; align-items: stretch; gap: 28px; }
+.email-masonry-column { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; }
+/* Fills whatever height the shortest column has left, so all columns end level. */
+.email-end-card { flex: 1 1 auto; min-height: 280px; margin-bottom: 36px; display: flex; flex-direction: column; justify-content: space-between; gap: 32px; padding: 28px; border-radius: 12px; border: 1px solid var(--color-line); background: radial-gradient(120% 70% at 100% 100%, rgb(255 159 10 / .16) 0%, rgb(255 159 10 / 0) 60%), var(--color-surface); color: var(--color-ink); text-decoration: none; }
+.email-end-card-body { display: block; }
+.email-end-card-action { display: inline-flex; align-items: center; gap: 8px; margin-top: 24px; padding: 12px 18px; border-radius: 980px; background: var(--color-fill); color: var(--color-page); font-size: 15px; font-weight: 600; transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1); }
+.email-end-card:focus-visible { outline: 2px solid var(--color-link); outline-offset: 5px; }
+.email-end-card:active .email-end-card-action { transform: scale(0.97); }
+.email-gallery-item { margin-bottom: 36px; }
+.email-preview-link { position: relative; display: block; overflow: hidden; border-radius: 12px; background: var(--color-surface); }
+.email-preview-image { display: block; width: 100%; height: auto; transition: filter 200ms; }
+.email-preview-action { position: absolute; right: 12px; bottom: 12px; display: flex; align-items: center; gap: 10px; padding: 10px 15px; border-radius: 980px; background: var(--color-page); color: var(--color-ink); font-size: 12px; opacity: 0; transform: translateY(4px); transition: opacity 180ms, transform 180ms; }
+.email-preview-link:focus-visible { outline: 2px solid var(--color-link); outline-offset: 5px; }
+.email-preview-link:focus-visible .email-preview-action { opacity: 1; transform: none; }
+.email-card-caption { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 18px 0 0; }
+.email-card-caption > span { padding-top: 4px; }
+.email-dialog { padding: 0; border: 1px solid var(--color-line-strong); border-radius: 18px; background: var(--color-surface); color: var(--color-ink); width: min(720px, calc(100vw - 32px)); max-width: none; max-height: none; margin: auto; overflow: hidden; }
+.email-dialog::backdrop { background: rgb(0 0 0 / .8); backdrop-filter: blur(12px); }
+.email-dialog-content { display: flex; flex-direction: column; max-height: calc(100dvh - 48px); }
+.email-dialog-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 20px; border-bottom: 1px solid var(--color-line); }
+.email-dialog-button { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 980px; color: var(--color-ink); background: var(--color-raised); transition: background-color 150ms; cursor: pointer; }
+.email-dialog-button:active { background: var(--color-overlay); }
+.email-dialog-scroll { overflow-y: auto; overscroll-behavior: contain; padding: 24px; background: var(--color-page); }
+.email-dialog-image { display: block; width: 100%; max-width: 600px; height: auto; margin: 0 auto; }
+@media (hover: hover) and (pointer: fine) {
+  .email-preview-link:hover .email-preview-action { opacity: 1; transform: none; }
+  .email-dialog-button:hover { background: var(--color-overlay); }
+}
+@media (min-width: 1280px) { .email-masonry { gap: 32px; } }
+@media (max-width: 1200px) { .email-gallery-header { display: block; } .email-gallery-header > p { margin-top: 24px; } }
+@media (max-width: 639px) {
+  .email-gallery-header { margin-bottom: 32px; }
+  .email-dialog { width: calc(100vw - 16px); border-radius: 12px; }
+  .email-dialog-content { max-height: calc(100dvh - 24px); }
+  .email-dialog-toolbar { padding: 12px; }
+  .email-dialog-scroll { padding: 0; }
+  .email-preview-action { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .email-preview-action, .email-preview-image, .email-dialog-button { transition: none; transform: none; } }
+@media (prefers-reduced-transparency: reduce) { .email-dialog::backdrop { background: var(--color-page); backdrop-filter: none; } }
